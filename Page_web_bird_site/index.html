@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Oiseaux en PACA</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial;
+    background-color: #EFF7E0;
+    color: #233F53;
+}
+
+.navbar {
+    background-color: #233F53;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar a {
+    color: #F7DC83;
+    margin: 0 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.context-box {
+    background-color: #F7DC83;
+    color: #233F53;
+    width: 70%;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 15px;
+    line-height: 1.5;
+}
+
+/* ===== GALERIE PAYSAGES ===== */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    width: 80%;
+    margin: 10px auto 40px;
+}
+
+.gallery-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Conteneur image + i */
+.image-container {
+    position: relative;
+    width: 170px;
+    height: 115px;
+}
+
+.gallery-item img {
+    width: 170px;
+    height: 115px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2.5px solid;
+    display: block;
+}
+
+.gallery-item:nth-child(1) img { border-color: #A2D1C1; }
+.gallery-item:nth-child(2) img { border-color: #FC9E4F; }
+.gallery-item:nth-child(3) img { border-color: #233F53; }
+.gallery-item:nth-child(4) img { border-color: #F7DC83; outline: 1.5px solid #bbb; outline-offset: -3px; }
+.gallery-item:nth-child(5) img { border-color: #A2D1C1; }
+
+.gallery-label {
+    font-size: 11px;
+    color: #233F53;
+    font-style: italic;
+    text-align: center;
+    max-width: 170px;
+}
+
+/* ===== BOUTON INFO ===== */
+.info-btn {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(35, 63, 83, 0.75);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 2;
+    transition: background 0.2s;
+}
+
+.info-btn:hover {
+    background: rgba(35, 63, 83, 1);
+}
+
+/* Bulle de crédit clic */
+.credit-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 30px;
+    right: 0;
+    background: rgba(35, 63, 83, 0.92);
+    color: white;
+    font-size: 10px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Flèche sous la bulle */
+.credit-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 8px;
+    border: 5px solid transparent;
+    border-top-color: rgba(35, 63, 83, 0.92);
+}
+
+.image-container:hover .credit-tooltip,
+.info-btn.active + .credit-tooltip {
+    display: block;
+}
+
+/* ===== DECORATIONS ===== */
+.page-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.deco {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* ===== SECTION PRINCIPALE ===== */
+.main-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 90%;
+    margin: auto;
+}
+
+.text-box {
+    width: 45%;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    line-height: 1.5;
+}
+
+.chart-container {
+    width: 45%;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    height: 290px;
+}
+
+/* ===== BULLE QUESTION CENTRALE ===== */
+.question-box {
+    background-color: #A2D1C1;
+    color: #233F53;
+    width: 60%;
+    margin: 35px auto 50px;
+    padding: 22px 28px;
+    border-radius: 15px;
+    line-height: 1.7;
+    text-align: center;
+    font-size: 15px;
+    position: relative;
+}
+
+.question-box::before {
+    content: "?";
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #233F53;
+    color: #F7DC83;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 34px;
+    text-align: center;
+}
+
+/* ===== SOURCE ===== */
+.source {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <a href="index.html">Accueil</a>
+    <a href="map.html">Carte interactive</a>
+    <a href="infographie.html">Infographie</a>
+    <a href="sources.html">Sources</a>
+</div>
+
+<div class="page-wrapper">
+
+    <!-- DECORATION HAUT GAUCHE -->
+    <img src="data/icones/mouette_vol.svg" class="deco"
+        style="top:80px;left:20px;width:150px;opacity:0.45;
+        filter:brightness(30) saturate(80%) invert(50%) sepia(50%) saturate(500%) hue-rotate(130deg);" alt="">
+
+    <!-- DECORATION HAUT DROITE -->
+    <img src="data/icones/mouette_vol.svg" class="deco"
+        style="top:80px;right:20px;width:90px;opacity:0.45;transform:scaleX(-1);
+        filter:brightness(0) saturate(100%) invert(78%) sepia(37%) saturate(559%) hue-rotate(358deg);" alt="">
+
+    <!-- DECORATION MILIEU GAUCHE -->
+    <img src="data/icones/mouette_vol.svg" class="deco"
+        style="top:55%;left:15px;width:90px;opacity:0.45;
+        filter:brightness(0) saturate(100%) invert(78%) sepia(37%) saturate(559%) hue-rotate(358deg);" alt="">
+
+    <!-- DECORATION BAS DROITE -->
+    <img src="data/icones/mouette_vol.svg" class="deco"
+        style="bottom:80px;right:30px;width:150px;opacity:0.45;transform:scaleX(-1);
+        filter:brightness(30) saturate(80%) invert(50%) sepia(50%) saturate(500%) hue-rotate(130deg);" alt="">
+
+    <h1>Observer la biodiversité aviaire en Provence-Alpes-Côte-d'Azur (PACA)</h1>
+
+    <!-- CONTEXTE -->
+    <div class="context-box">
+        <p align="justify"><strong>La région Provence-Alpes-Côte-d'Azur</strong> (ou PACA) est le territoire possédant la plus grande étendue d'espaces naturels de France (Insee, 2022). La région propose une grande diversité de paysages s'étendant du Sud des Alpes jusqu'à la mer Méditerranée, enchaînant ainsi paysages de haute montagne (Mont Pelat), collines et plateaux (Plateau de Vaucluse), plaines (Les Maures), zones humides (Camargue) et littorales (Marseille). Cette mosaïque de milieux fait de la région PACA une réserve de biodiversité remarquable, celle-ci hébergeant près de trois quarts des espèces françaises, un patrimoine naturel protégé par 9 parcs naturels régionaux et 4 parcs nationaux (Insee, 2022).
+        </p>
+    </div>
+
+    <!-- GALERIE PAYSAGES -->
+    <div class="gallery" id="gallery"></div>
+
+    <!-- SECTION TEXTE + GRAPHIQUE -->
+    <div class="main-container">
+
+        <div class="text-box">
+            <h3>Pourquoi s'intéresser aux oiseaux ?</h3>
+            <p align="justify">
+                Les oiseaux constituent le groupe faunistique le plus étudié au monde (CEN PACA, 2021) et ont,
+                pour la plupart, l'avantage de pouvoir être observés et écoutés assez facilement par tous au quotidien.
+            </p>
+            <p align="justify">
+                Concernant la région PACA, selon la liste rouge du territoire en 2021 (CEN PACA, 2021) celle-ci abrite
+                près de <strong>85 % des espèces d'oiseaux nicheurs de France métropolitaine</strong> (235 espèces sur 277),
+                <strong>45 % des espèces de passage</strong> (189 sur 417) et
+                <strong>83 % d'espèces hivernantes</strong> (147 sur 178).
+            </p>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="scatterChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- BULLE QUESTION CENTRALE -->
+    <div class="question-box">
+        <p style="margin:0;">
+            La région proposant une grande diversité d'espèces sur son territoire avec un grand nombre potentiel d'observateurs,
+            <strong>combien observent activement les oiseaux</strong> et <strong>quels sont les oiseaux les plus observés ?</strong>
+        </p>
+    </div>
+
+    <div class="source">
+        Site web réalisé dans le cadre d'un exercice de datavisualisation de niveau Master 1
+        Observation de la Terre et Géomatique (Hélène OSTERMANN)
+    </div>
+
+</div>
+
+<script>
+
+// ==============================
+// GALERIE — paysages
+// ==============================
+
+const paysages = [
+    { label: "Mont Pelat — haute montagne",       img: "data/images/mont_pelat.jpg",       credit: "kallerna, CC BY-SA 4.0" },
+    { label: "Plateau de Vaucluse — collines",    img: "data/images/plateau_vaucluse.jpg", credit: "Englandfan~commonswiki, CC BY-SA 4.0" },
+    { label: "Les Maures — plaines",              img: "data/images/maures.jpg",           credit: "Concha AGERO, CC BY-SA 4.0" },
+    { label: "Camargue — zones humides",          img: "data/images/camargue.jpg",         credit: "Dkiechle, CC BY-SA 4.0" },
+    { label: "Marseille — littoral et zone urbaine", img: "data/images/marseille.jpg",     credit: "Hilader, CC BY-SA 4.0" }
+];
+
+const gallery = document.getElementById("gallery");
+
+paysages.forEach(p => {
+    const item = document.createElement("div");
+    item.className = "gallery-item";
+
+    // Conteneur image
+    const container = document.createElement("div");
+    container.className = "image-container";
+
+    // Photo
+    const img = document.createElement("img");
+    img.src = p.img;
+    img.alt = p.label;
+
+    // Bouton "i"
+    const btn = document.createElement("div");
+    btn.className = "info-btn";
+    btn.textContent = "i";
+    btn.title = p.credit;
+
+    // Bulle crédit
+    const tooltip = document.createElement("div");
+    tooltip.className = "credit-tooltip";
+    tooltip.textContent = "© " + p.credit;
+
+    container.appendChild(img);
+    container.appendChild(btn);
+    container.appendChild(tooltip);
+
+    // Libellé sous la photo
+    const label = document.createElement("span");
+    label.className = "gallery-label";
+    label.textContent = p.label;
+
+    item.appendChild(container);
+    item.appendChild(label);
+    gallery.appendChild(item);
+});
+
+// ==============================
+// GRAPHIQUE BUBBLE
+// ==============================
+
+fetch("data/indicateurs_departements.csv")
+.then(res => res.text())
+.then(csv => {
+    const rows = csv.trim().split("\n").slice(1);
+    let dataPoints = rows.map(r => {
+        let c = r.split(",");
+        return {
+            label: c[0],
+            x: Number(c[1]),
+            y: Number(c[2]),
+            r: Math.sqrt(Number(c[1])) / 50
+        };
+    });
+
+    new Chart(document.getElementById("scatterChart"), {
+        type: "bubble",
+        data: {
+            datasets: [{
+                label: "Départements",
+                data: dataPoints,
+                backgroundColor: "#FC9E4F"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.raw.label +
+                                " | Observations : " + context.raw.x +
+                                " | Espèces : " + context.raw.y;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { title: { display: true, text: "Nombre d'observations" } },
+                y: { title: { display: true, text: "Nombre d'espèces différentes" } }
+            }
+        }
+    });
+});
+
+</script>
+
+</body>
+</html>

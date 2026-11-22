@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Sources</title>
+
+<style>
+
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    font-family: Arial;
+    background-color: #EFF7E0;
+    color: #233F53;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background-color: #233F53;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar a {
+    color: #F7DC83;
+    margin: 0 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* ===== TITRE ===== */
+h1 {
+    text-align: center;
+    margin: 30px;
+}
+
+/* ===== BOUTONS BULLES ===== */
+.menu {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.menu a {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+/* ===== SOURCE ===== */
+.source {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+/* couleurs catégories */
+.cat1 { background:#A2D1C1; }
+.cat2 { background:#FC9E4F; }
+.cat3 { background:#F7DC83; color:#233F53; }
+.cat4 { background:#233F53; }
+
+/* ===== BLOCS ===== */
+.block {
+    width: 70%;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 20px;
+}
+
+/* couleurs blocs */
+.block1 { background:#A2D1C1; }
+.block2 { background:#FC9E4F; }
+.block3 { background:#F7DC83; }
+.block4 { background:#233F53; color:white; }
+
+/* ===== LISTES ===== */
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+/* ===== LIENS ===== */
+a {
+    color: inherit;
+}
+
+/* ===== ICÔNES DÉCORATIVES ===== */
+.deco-left, .deco-right {
+    position: fixed;
+    opacity: 0.45;
+    /* couleur personnalisée */
+    filter: brightness(30) saturate(80%) invert(50%) sepia(50%) saturate(500%) hue-rotate(130deg);
+}
+
+.deco-left {
+    width: 300px;
+    left: -130px;
+    top: 80px;
+}
+
+.deco-right {
+    width: 300px;
+    right: -30px;
+    bottom: 200px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <a href="index.html">Accueil</a>
+    <a href="map.html">Carte interactive</a>
+    <a href="infographie.html">Infographie</a>
+    <a href="sources.html">Sources</a>
+</div>
+
+<h1>Sources</h1>
+
+<!-- MENU BULLES -->
+<div class="menu">
+    <a href="#biblio" class="cat1">Bibliographie</a>
+    <a href="#data" class="cat2">Données</a>
+    <a href="#images" class="cat3">Photographies</a>
+    <a href="#methodes" class="cat4">Traitements</a>
+</div>
+
+<!-- ===================== -->
+<!-- BIBLIOGRAPHIE -->
+<!-- ===================== -->
+<div id="biblio" class="block block1">
+<h2>Bibliographie</h2>
+<ul>
+<li>CEN PACA & LPO, (2021), «Liste rouge régionale des oiseaux nicheurs, de passage et hivernants de Provence-Alpes-Côte d’Azur», CEN Paca, 16p – <a href="https://cen-paca.org/wp-content/uploads/2022/05/CENPACA_ListeRougeOISEAUX_2021.pdf" target="_blank">consultez ici</a></li>
+<li>Cerema & DREAL PACA (2020), « Indicateurs de biodiversité, Provence-Alpes-Côte-d'Azur», 114p – <a href="https://www.paca.developpement-durable.gouv.fr/IMG/pdf/indicateurs_biodiversite_rapport_juin_2020.pdf" target="_blank">consultez ici</a></li>
+<li>DREAL PACA (2017), « Atlas des paysages des Alpes-de-Haute-Provence » – <a href="https://departement04.atlas-paysages-paca.fr/presentation-du-departement/le-cadre-naturel.html" target="_blank">consultez ici</a></li>
+<li>INSEE, (2022), «Atlas régional de Provence-Alpes-Côte d’Azur, les défis d’une région contrastée», Insee Dossier (n° 11) Provence-Alpes-Côte d’Azur, 64p – <a href="https://www.insee.fr/fr/statistiques/6672132" target="_blank">consultez ici</a></li>
+</ul>
+</div>
+
+<!-- ===================== -->
+<!-- DONNÉES -->
+<!-- ===================== -->
+<div id="data" class="block block2">
+<h2>Données utilisées</h2>
+<ul>
+<li>Datagouv (2022), « Contours des communes de France simplifié, avec régions et département d'outre-mer rapprochés», ICEM7 – <a href="https://www.data.gouv.fr/datasets/contours-des-communes-de-france-simplifie-avec-regions-et-departement-doutre-mer-rapproches" target="_blank">consultez ici</a></li>  
+<li>GBIF.org (2026), «GBIF Occurrence, EOD – eBird Observation Dataset», GBIF (Global Biodiversity Information Facility) – <a href="https://doi.org/10.15468/dl.ne4emx" target="_blank">consultez ici [https://doi.org/10.15468/dl.ne4emx]</a></li>
+<li>INSEE (2022), «Comparateur de territoires – Région de Provence-Alpes-Côte d'Azur (93) », Insee – <a href="https://www.insee.fr/fr/statistiques/1405599?geo=REG-93" target="_blank">consultez ici</a></li>
+<li>Ministère de l’Agriculture, de l’Agro-alimentaire et de la Souveraineté alimentaire, (2022), « Données d'Occupation du sol à Grande échelle en Provence Alpes Cote d'Azur », Datasud – <a href="https://www.datasud.fr/explorer/fr/jeux-de-donnees/donnees-ocs-ge-en-provence-alpes-cote-d-azur/telechargements" target="_blank">consultez ici</a></li>
+</ul>
+</div>
+
+<!-- ===================== -->
+<!-- IMAGES -->
+<!-- ===================== -->
+<div id="images" class="block block3">
+<h2>Photographies</h2>
+
+<p><b>Photographies d'oiseaux issues de Wikimedia Commons :</b></p>
+
+<ul>
+<li><b>Aigrette garzette: </b><a href="https://commons.wikimedia.org/wiki/File:Little_Egret_2025_05_30_03.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/wiki/User:Alexis_Lours " target="_blank">Alexis Lours</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by/4.0/deed.en" target="_blank">Creative Commons Attribution 4.0 International</a></p>
+
+<li><b>Fauvette à tête noire: </b><a href="https://commons.wikimedia.org/wiki/File:Curruca_capirotada_%E2%80%93_Sylvia_atricapilla_(%E2%99%82)_Joven_(6837017300).jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://www.flickr.com/people/22009023@N03" target="_blank">Juan Emilio</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/2.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 2.0 Generic</a></p>
+
+<li><b>Goéland leucophée: </b><a href="https://commons.wikimedia.org/wiki/File:Larus_michahellis_LC0046.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/wiki/User:LC-de" target="_blank">Jörg Hempel</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/2.0/de/deed.en" target="_blank">Creative Commons Attribution-Share Alike 2.0 Germany</a></p>
+
+<li><b>Merle noir: </b><a href="https://commons.wikimedia.org/wiki/File:Turdus_merula_male_(Germany,Eppelheim).jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/wiki/User:Thorsten_Denhard" target="_blank">Thorsten Denhard</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 3.0 Unported</a></p>
+
+<li><b>Mésange charbonnière: </b><a href="https://commons.wikimedia.org/wiki/File:Parus_major_poised.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/wiki/User:Baresi_franco" target="_blank">Francis Franklin</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 4.0 International</a></p>
+
+<li><b>Mouette rieuse: </b><a href="https://commons.wikimedia.org/wiki/File:Chroicocephalus_ridibundus_%D0%9E%D0%B7%D1%91%D1%80%D0%BD%D0%B0%D1%8F_%D1%87%D0%B0%D0%B9%D0%BA%D0%B0_%D0%BD%D0%B0_%D0%BA%D0%B0%D0%BC%D0%BD%D0%B5.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/w/index.php?title=User:Tsyganov_Sergey&action=edit&redlink=1" target="_blank">Tsyganov Sergey</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 4.0 International</a></p>
+
+<li><b>Pie bavarde: </b><a href="https://commons.wikimedia.org/wiki/File:Common_magpie_(Pica_pica).jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://www.wikidata.org/wiki/Q54800218" target="_blank">Charles J. Sharp</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 4.0 International</a></p>
+
+<li><b>Pigeon biset: </b><a href="https://commons.wikimedia.org/wiki/File:Rock_Dove_(Columba_livia),_Raikot,_Diamer,_Gilgit-Baltistan,_Pakistan_(53928392228).jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://www.flickr.com/people/68466173@N02" target="_blank">Birds of Gilgit-Baltistan</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/2.0" target="_blank">Creative Commons Attribution-Share Alike 2.0</a></p>
+
+<li><b>Pigeon ramier: </b><a href="https://commons.wikimedia.org/wiki/File:Columba_palumbus_-garden_post-8.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://www.flickr.com/people/89056504@N00" target="_blank">Tristan Ferne</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by/2.0/deed.en" target="_blank">Creative Commons Attribution 2.0 Generic</a></p>
+
+<li><b>Pinson des arbres: </b><a href="https://commons.wikimedia.org/wiki/File:Fringilla_coelebs_male_rozenburg.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/w/index.php?title=User:Dwergenpaartje&action=edit&redlink=1" target="_blank">Dwergenpaartje</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en" target="_blank">Attribution-Share Alike 3.0 Unported</a></p>
+
+<li><b>Tourterelle turque </b><a href="https://commons.wikimedia.org/wiki/File:Streptopelia_decaocto_-_Eurasian_Collared_Dove_02.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/wiki/User:Zcebeci" target="_blank">Zeynel Cebeci</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 4.0 International</a></p>
+</ul>
+<p> </p>
+<p><b>Photographies de paysages issues de Wikimedia Commons :</b></p>
+
+<ul>
+<li><b>Camargue: </b><a href="https://commons.wikimedia.org/wiki/File:Dans_le_parc_ornithologique_du_Pont_de_Gau.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/w/index.php?title=User:Dkiechle&action=edit&redlink=1" target="_blank">Dkiechle</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution 4.0 International</a></p>
+
+<li><b>Plateaux de Vaucluse: </b><a href="https://commons.wikimedia.org/wiki/File:Lavendel_in_der_Provence_274_Mont_Ventoux.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/w/index.php?title=User:Englandfan~commonswiki&action=edit&redlink=1" target="_blank">Englandfan~commonswiki</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 4.0 International </a></p>
+
+<li><b>Marseille: </b><a href="https://commons.wikimedia.org/wiki/File:Panorama_de_Marseille_depuis_le_col_des_Ch%C3%A8vres.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/w/index.php?title=User:Hilader&action=edit&redlink=1" target="_blank">Hilader</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 4.0 International </a></p>
+
+<li><b>Mont Pelat: </b><a href="https://commons.wikimedia.org/wiki/File:Mont_Pelat_%2B_Lake_Allos_tour_24.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/wiki/User:Kallerna" target="_blank">kallerna</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 4.0 International </a></p>
+
+<li><b>Plaine des Maures: </b><a href="https://commons.wikimedia.org/wiki/File:Paysage_de_la_R%C3%A9serve_Naturelle_de_la_Plaine_des_Maures_13.jpg" target="_blank">consultez la photo ici</a></li>
+<p>Auteur: <a href="https://commons.wikimedia.org/w/index.php?title=User:Concha_AGERO&action=edit&redlink=1" target="_blank">Concha AGERO</a></p>
+<p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">Creative Commons Attribution-Share Alike 4.0 International </a></p>
+</ul>
+
+<p><i>Note : Les images ont été compressées pour alléger le poids du code html, la qualité des images n’est pas représentative des images d’origine, veuillez consulter les images d’origine sur les liens indiqués ci-dessus.</i></p>
+
+</div>
+
+<!-- ===================== -->
+<!-- MÉTHODES -->
+<!-- ===================== -->
+<div id="methodes" class="block block4">
+<h2>Traitements des données</h2>
+<ul>
+<li>Calculs réalisés sous RStudio (dominance, richesse, observateurs)</li>
+<li>Traitements complémentaires sous Excel (occupation du sol, population)</li>
+<li>Compression des images : <a href="https://www.shutterstock.com/fr/image-compressor" target="_blank">Shutterstock</a></li>
+<li>Icônes : <a href="https://creazilla.com/fr/media/clipart/7928038/mouettes" target="_blank">Creazilla</a></li>
+<li>Codes couleurs (HEX codes): <a href="https://coolors.co/" target="_blank">Coolors</a></li>
+
+</ul>
+</div>
+
+<div class="source">
+Site web réalisé dans le cadre d'un exercice de datavisualisation de niveau Master 1 Observation de la Terre et Géomatique (Hélène OSTERMANN)
+</div>
+
+<!-- ICÔNES DÉCO -->
+<img src="data/icones/bird_deco2.svg" class="deco-left">
+<img src="data/icones/mouette_vol.svg" class="deco-right">
+
+</body>
+</html>

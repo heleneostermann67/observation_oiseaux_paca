@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Carte PACA</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    font-family: Arial;
+    background-color: #EFF7E0;
+    color: #233F53;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background-color: #233F53;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar a {
+    color: #F7DC83;
+    margin: 0 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* ===== TITRE ===== */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* ===== explication ===== */
+.context-box {
+    background-color: #F7DC83;
+    color: #233F53;
+    width: 70%;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 15px;
+    line-height: 1.6;
+}
+
+.text-normal {
+    font-weight: normal;
+    text-align: justify;
+}
+
+/* ===== CARTE ===== */
+#map {
+    height: 600px;
+    width: 80%;
+    margin: 30px auto;
+    border: 3px solid #233F53;
+    border-radius: 10px;
+}
+
+/* ===== POPUP ===== */
+.leaflet-popup-content {
+    width: 320px !important;
+    color: #233F53;
+}
+
+/* ===== PODIUM ===== */
+.podium {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin-top: 10px;
+}
+
+.step {
+    text-align: center;
+    width: 30%;
+}
+
+.step img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Annotation sous podium */
+.podium-note {
+    text-align: center;
+    font-size: 10px;
+    margin-top: 5px;
+    color: #233F53;
+}
+
+/* Barres podium */
+.bar {
+    margin-top: 5px;
+    border-radius: 5px;
+    font-size: 11px;
+    background: #FC9E4F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.bar {
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    background: #FC9E4F;
+}
+
+/* ===== INFO ICON ===== */
+.image-container {
+    position: relative;
+}
+
+.info-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    bottom: 25px;
+    right: 0;
+    background: white;
+    padding: 5px;
+    font-size: 10px;
+    border-radius: 5px;
+    width: 140px;
+}
+
+.image-container:hover .tooltip {
+    display: block;
+}
+
+.deco-box {
+    position: relative;
+}
+
+.bird-deco {
+    position: absolute;
+    right: 10px;   /* position */
+    top: -10%;
+    transform: translateY(-50%);
+    transform: translateX(170px);
+    width: 280px;
+
+    /* couleur personnalisée */
+    filter: brightness(0) saturate(100%) invert(78%) sepia(37%) saturate(559%) hue-rotate(358deg);
+}
+
+.icon-box {
+    position: relative;
+}
+
+.mouettevol-deco {
+    position: absolute;
+    right: 10px;   /* position */
+    top: 95%;
+    transform: translateY(-190%);
+    transform: translateX(-730px);
+    width: 300px;
+
+    /* couleur personnalisée */
+    filter: brightness(0) saturate(100%) invert(78%) sepia(37%) saturate(559%) hue-rotate(358deg);
+}
+
+/* ===== LEGENDE ===== */
+.legend {
+    background: white;
+    padding: 10px;
+    line-height: 1.5;
+    color: #233F53;
+}
+
+/* ===== SOURCE ===== */
+.source {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+/* ===== BULLE ===== */
+.question-box {
+    background-color: #A2D1C1;
+    color: #233F53;
+    width: 60%;
+    margin: 35px auto 50px;
+    padding: 22px 28px;
+    border-radius: 15px;
+    line-height: 1.7;
+    text-align: center;
+    font-size: 15px;
+    position: relative;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <a href="index.html">Accueil</a>
+    <a href="map.html">Carte interactive</a>
+    <a href="infographie.html">Infographie</a>
+    <a href="sources.html">Sources</a>
+</div>
+
+    <!-- ===== Explication ===== -->
+    <div class="context-box deco-box">
+    <img src="data/icones/bird_deco2.svg" class="bird-deco">
+    <img src="data/icones/mouette_vol.svg" class="mouettevol-deco">
+
+        <h3>Qu’est-ce que la dominance ?<h3>
+
+        <p class="text-normal">
+            L’indice de dominance représenté en nuances de rouges sur la carte indique le pourcentage qu’occupe le nombre total d’observations pour une espèce au sein de la quantité totale d’observations pour le département. Ainsi, plus le pourcentage de dominance est élevé, plus l’écart dans le nombre d’observations entre l’espèce dominante et le reste des espèces présentes augmente, ceci indique que l’espèce dominante est largement plus observée que les autres espèces.
+        </p>
+    </div>
+
+
+<h1>Oiseaux les plus observés en PACA (2023-2024)</h1>
+
+<div id="map"></div>
+
+<!-- BULLE -->
+<div class="question-box">
+    <p align="justify">
+        L'oiseau le plus observé en région PACA est le <b>Goéland Leucophée</b> <em>(Larus michahellis)</em>, dominant par sa présence 2 départements (Alpes-Maritimes, Bouches-du-Rhône) du littoral de la région. Il est intéressant de noter que le <b>Goéland Leucophée</b> ne domine pas entièrement les observations du littoral, la <b>Pie bavarde</b> s'impose dans le Var comme l'oiseau le plus observé entre 2023 et 2024.
+        <p> </p>
+
+        <p align="justify">
+        Il est important de conserver un regard critique sur cette carte car <b>les données d'observations sont des données participatives et non des données à caractère purement scientifique</b>. De plus, un <b>tampon de 5km à été appliqué sur les zones littorales</b> dans le but de ne pas exclure des observations proches des côtes. Ainsi, la carte produite peut être sujette à plusieurs biais qu'il faut prendre en considération.
+    </p>
+</div>
+
+
+<div class="source">
+Site web réalisé dans le cadre d'un exercice de datavisualisation de niveau Master 1 Observation de la Terre et Géomatique (Hélène OSTERMANN)
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+// ==============================
+// FONCTIONS
+// ==============================
+
+function cleanName(name) {
+    return name.split(" ").slice(0,2).join(" ");
+}
+
+// ==============================
+// DONNEES OISEAUX + CREDITS
+// ==============================
+
+const birdData = {
+"Larus michahellis": {name:"Goéland leucophée", img:"data/images/goeland.jpg",
+credit:"Jörg Hempel CC-BY-SA 2.0"},
+"Pica pica": {name:"Pie bavarde", img:"data/images/pie.jpg",
+credit:"Charles J. Sharp CC-BY-SA 4.0"},
+"Columba palumbus": {name:"Pigeon ramier", img:"data/images/pigeon_ramier.jpg",
+credit:"Tristan Ferne CC-BY 2.0"},
+"Parus major": {name:"Mésange charbonnière", img:"data/images/mesange.jpg",
+credit:"Francis Franklin CC-BY-SA 4.0"},
+"Fringilla coelebs": {name:"Pinson des arbres", img:"data/images/pinson.jpg",
+credit:"Dwergenpaartje CC-BY-SA 3.0"},
+"Turdus merula": {name:"Merle noir", img:"data/images/merle.jpg",
+credit:"Thorsten Denhard CC-BY-SA 3.0"},
+"Sylvia atricapilla": {name:"Fauvette à tête noire", img:"data/images/fauvette.jpg",
+credit:"Juan Emilio CC-BY-SA 2.0"},
+"Columba livia": {name:"Pigeon biset", img:"data/images/pigeon_biset.jpg",
+credit:"Birds of Gilgit CC-BY-SA 2.0"},
+"Chroicocephalus ridibundus": {name:"Mouette rieuse", img:"data/images/mouette.jpg",
+credit:"Tsyganov Sergey CC-BY-SA 4.0"},
+"Egretta garzetta": {name:"Aigrette garzette", img:"data/images/aigrette.jpg",
+credit:"Alexis Lours CC-BY 4.0"},
+"Streptopelia decaocto": {name:"Tourterelle turque", img:"data/images/tourterelle.jpg",
+credit:"Zeynel Cebeci CC-BY-SA 4.0"}
+};
+
+// ==============================
+// COULEURS DOMINANCE
+// ==============================
+
+function getColor(d) {
+    return d > 0.04 ? "#960018" :
+           d > 0.03 ? "#DE0A26" :
+                      "#EE6B6E";
+}
+
+// ==============================
+// CARTE
+// ==============================
+
+var map = L.map('map').setView([43.8, 6.3], 7);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+// ==============================
+// LEGENDE
+// ==============================
+
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function () {
+    var div = L.DomUtil.create('div', 'legend');
+    div.innerHTML += "<b>Dominance</b><br>";
+    div.innerHTML += "<i style='background:#EE6B6E;width:15px;height:15px;display:inline-block'></i> < 3%<br>";
+    div.innerHTML += "<i style='background:#DE0A26;width:15px;height:15px;display:inline-block'></i> 3-4%<br>";
+    div.innerHTML += "<i style='background:#960018;width:15px;height:15px;display:inline-block'></i> > 4%";
+    return div;
+};
+
+legend.addTo(map);
+
+// ==============================
+// CHARGEMENT DONNEES
+// ==============================
+
+Promise.all([
+    fetch("data/paca_departements.geojson").then(res => res.json()),
+    fetch("data/top3_departements.csv").then(res => res.text())
+]).then(([geoData, csv]) => {
+
+    const rows = csv.trim().split("\n").slice(1);
+
+    const top3 = rows.map(r => {
+        const m = r.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+        return {
+            libgeo: m[0],
+            scientificName: m[1].replace(/"/g,''),
+            n: Number(m[2]),
+            rang: Number(m[3])
+        };
+    });
+
+    function getTop3(dep){
+        return top3.filter(d => d.libgeo === dep);
+    }
+
+    function onEachFeature(feature, layer){
+
+        let dep = feature.properties.libgeo;
+        let dominant = cleanName(feature.properties.scientificName);
+        let dom = birdData[dominant] || {name: dominant};
+
+        let top = getTop3(dep);
+
+        let podium = "<b>Les 3 espèces les plus observées :</b><div class='podium'>";
+
+        top.forEach((d,i)=>{
+
+        let clean = cleanName(d.scientificName);
+        let bird = birdData[clean] || {name: clean};
+
+        // Hauteurs fixes pour effet podium
+        let heights = [70, 50, 30];
+        let height = heights[i];
+
+        podium += `
+        <div class="step">
+            <div class="image-container">
+                <img src="${bird.img}">
+                <div class="info-btn">i</div>
+                <div class="tooltip">${bird.credit}</div>
+            </div>
+            <div>${bird.name}</div>
+            <div class="bar" style="height:${height}px">${d.n}</div>
+        </div>`;
+    });
+        podium += "</div><div class='podium-note'>Nombre total d'observations</div>";
+
+        layer.bindPopup(`
+            <b>Département : ${dep}</b><br><br>
+            <b>Oiseau le plus observé :</b> ${dom.name}<br>
+            <b>Pourcentage d’observation :</b> ${(feature.properties.dominance_ratio*100).toFixed(2)} %<br><br>
+            ${podium}
+        `);
+    }
+
+    L.geoJson(geoData,{
+        style: f => ({
+            fillColor: getColor(f.properties.dominance_ratio),
+            weight: 2,
+            color: "white",
+            fillOpacity: 0.7
+        }),
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+});
+
+</script>
+
+</body>
+</html>

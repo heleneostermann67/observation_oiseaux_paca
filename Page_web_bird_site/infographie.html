@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Infographie - PACA</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background-color: #EFF7E0;
+    color: #233F53;
+}
+.navbar {
+    background-color: #233F53;
+    padding: 20px;
+    text-align: center;
+}
+.navbar a {
+    color: #F7DC83;
+    margin: 0 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+h1 { text-align: center; margin-top: 10px; }
+.section {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 50px 5%;
+}
+.section.reverse { flex-direction: row-reverse; }
+.text-box {
+    width: 40%;
+    background: #F7DC83;
+    padding: 20px;
+    border-radius: 15px;
+    position: relative;
+}
+.icon {
+    position: absolute;
+    top: -40px;
+    right: 0px;
+    width: 60px;
+    filter: brightness(0) saturate(100%) invert(78%) sepia(37%) saturate(559%) hue-rotate(358deg);
+}
+.chart-container {
+    width: 50%;
+    position: relative;
+    height: 300px;
+}
+#occsol-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 85%;
+    margin: 30px auto;
+}
+.occsol-chart {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+.occsol-chart canvas {
+    height: 140px !important;
+}
+.source {
+    text-align: center;
+    margin: 20px;
+    font-size: 12px;
+}
+
+/* ===== BULLE ===== */
+.question-box {
+    background-color: #A2D1C1;
+    color: #233F53;
+    width: 60%;
+    margin: 35px auto 50px;
+    padding: 22px 28px;
+    border-radius: 15px;
+    line-height: 1.7;
+    text-align: center;
+    font-size: 15px;
+    position: relative;
+}
+
+</style>
+</head>
+
+<body>
+<div class="navbar">
+    <a href="index.html">Accueil</a>
+    <a href="map.html">Carte interactive</a>
+    <a href="infographie.html">Infographie</a>
+    <a href="sources.html">Sources</a>
+</div>
+
+<h1>Analyse des observations d'oiseaux en PACA</h1>
+
+<div class="section">
+    <div class="text-box">
+        <img src="data/icones/mouette.svg" class="icon">
+        <p><b>Observer les oiseaux en PACA</b></p>
+        <p align="justify">
+            Si la région est riche en biodiversité, elle possède également une densité de population importante,
+            avec plus de 5 000 000 d'habitants il s'agit de la
+            <strong>« 10e région la plus peuplée de l'Union européenne. »</strong> (Insee, 2022).
+        </p>
+    </div>
+    <div class="chart-container">
+        <canvas id="chart1"></canvas>
+    </div>
+</div>
+
+<div class="section reverse">
+    <div class="text-box">
+        <img src="data/icones/mouette.svg" class="icon">
+        <p><b>Qu'est-ce que la richesse spécifique?</b></p>
+        <p align="justify">
+            La richesse spécifique est un indicateur de biodiversité, il s'agit du nombre d'espèces présentes
+            au sein d'un espace donné (Cerema, 2021). Ici, la richesse spécifique correspond au nombre d'espèces
+            d'oiseaux différentes au sein de chaque département de la région Provence-Alpes-Côte-d'Azur.
+        </p>
+    </div>
+    <div class="chart-container">
+        <canvas id="chart2"></canvas>
+    </div>
+</div>
+
+<h2 style="text-align:center;">Occupation du sol par département</h2>
+<div id="occsol-container"></div>
+    
+<!-- BULLE -->
+<div class="question-box">
+    <p align="justify">
+        Analyser l'occupation du sol des territoires permet de mieux comprendre la répartition des espèces dans l'espace. Ici, le département des <b>Bouches-du-Rhône</b> se démarque par sa grande part de surfaces humides (Camargue), proposant près de <b>10 fois plus de surfaces humides que les autres départements de la région PACA</b>, l'occupation du sol du département favorise les oiseaux d'eau qui y trouvent un habitat adapté à leur besoins.
+        <p> </p>
+
+        <p align="justify">
+        Cependant, la lecture de ces graphiques doit rester critique. En effet, le département des <b>Hautes-Alpes</b> possède une grande part de zones ouvertes (praires, clairières), pourtant les espèces les plus observées sont généralistes (pinson des arbres, mésange charbonnière, merle noir) et non des espèces spécialistes des milieux agricoles. Ainsi, <b>l'occupation du sol n'est pas une donnée expliquant entièrement la raison pour laquelle une espèce est majoritaire dans un espace donné.</b>
+        <p>
+    </p>
+</div>
+
+<div class="source">
+Site web réalisé dans le cadre d'un exercice de datavisualisation de niveau Master 1 Observation de la Terre et Géomatique (Hélène OSTERMANN)
+</div>
+
+<script>
+
+Promise.all([
+    fetch("data/indi_dep2.csv").then(r => r.text()),
+    fetch("data/occsol_paca_2022.csv").then(r => r.text())
+]).then(([indCSV, occCSV]) => {
+
+    // ==============================
+    // INDICATEURS DEPARTEMENTS
+    // ==============================
+    function parseIndic(text) {
+        const lines = text.trim().split("\n");
+        // Ignore la ligne d'en-tête (index 0)
+        return lines.slice(1).map(line => {
+            const c = line.split(",");
+            return {
+                dep:          c[0].trim(),
+                observations: Number(c[1].trim()) || 0,
+                richesse:     Number(c[2].trim()) || 0,
+                observateurs: Number(c[3].trim()) || 0,
+                densite:      Number(c[4].trim()) || 0
+            };
+        }).filter(d => d.dep !== "");
+    }
+
+    // ==============================
+    // OCCUPATION DU SOL
+    // ==============================
+    function parseOcc(text) {
+        const lines = text.trim().split("\n");
+        return lines.slice(1).map(line => {
+            const c = line.split(";");
+            return {
+                dep:     c[1]?.trim().replace(/"/g, "") || "",
+                surface: Number(c[3]?.replace(",", ".").trim()) || 0,
+                urbain:  Number(c[4]?.replace(",", ".").trim()) || 0,
+                foret:   Number(c[5]?.replace(",", ".").trim()) || 0,
+                ouvert:  Number(c[6]?.replace(",", ".").trim()) || 0,
+                humide:  Number(c[7]?.replace(",", ".").trim()) || 0
+            };
+        }).filter(d => d.dep !== "");
+    }
+
+    const indic = parseIndic(indCSV);
+    const occ   = parseOcc(occCSV);
+
+    // ==============================
+    // GRAPHIQUE 1 — densité vs observateurs
+    // ==============================
+    new Chart(document.getElementById("chart1"), {
+        type: "scatter",
+        data: {
+            datasets: [{
+                label: "Départements",
+                data: indic.map(d => ({ x: d.densite, y: d.observateurs })),
+                backgroundColor: "#A2D1C1",
+                pointRadius: 7,
+                pointHoverRadius: 9
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: "Relation entre densité de population et nombre d'observateurs",
+                    color: "#233F53",
+                    font: { size: 15 }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const d = indic[ctx.dataIndex];
+                            return `${d.dep} — densité : ${d.densite.toFixed(1)} hab/km², observateurs : ${d.observateurs}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: "linear",
+                    min: 0,
+                    title: { display: true, text: "Densité de population (hab/km²)" }
+                },
+                y: {
+                    min: 0,
+                    title: { display: true, text: "Observateurs uniques" }
+                }
+            }
+        }
+    });
+
+    // ==============================
+    // GRAPHIQUE 2 — richesse spécifique
+    // ==============================
+    new Chart(document.getElementById("chart2"), {
+        type: "bar",
+        data: {
+            labels: indic.map(d => d.dep),
+            datasets: [{
+                data: indic.map(d => d.richesse),
+                backgroundColor: "#FC9E4F"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: "Richesse spécifique en oiseaux par département",
+                    color: "#233F53",
+                    font: { size: 15, weight: "bold" },
+                    padding: { top: 10, bottom: 20 }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { maxRotation: 30, font: { size: 11 } }
+                },
+                y: { min: 0 }
+            }
+        }
+    });
+
+    // ==============================
+    // OCC SOL — dep
+    // ==============================
+    const container = document.getElementById("occsol-container");
+    const maxTotal  = Math.max(...occ.map(d => d.surface));
+
+    occ.forEach(d => {
+        const div    = document.createElement("div");
+        div.className = "occsol-chart";
+
+        const title  = document.createElement("p");
+        title.innerHTML = `<b>${d.dep}</b><br>
+            <span style="font-size:12px">Surface : ${d.surface.toFixed(2)} km²</span>`;
+
+        const canvas = document.createElement("canvas");
+
+        div.appendChild(title);
+        div.appendChild(canvas);
+        container.appendChild(div);
+
+        new Chart(canvas, {
+            type: "bar",
+            data: {
+                labels: [""],
+                datasets: [
+                    { label: "Urbain",  data: [d.urbain],  backgroundColor: "#FC9E4F" },
+                    { label: "Forêt",   data: [d.foret],   backgroundColor: "#A2D1C1" },
+                    { label: "Ouvert",  data: [d.ouvert],  backgroundColor: "#F7DC83" },
+                    { label: "Humide",  data: [d.humide],  backgroundColor: "#233F53" }
+                ]
+            },
+            options: {
+                indexAxis: "y",
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 1200 },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label} : ${ctx.raw.toFixed(2)} km²`
+                        }
+                    },
+                    legend: { position: "bottom" }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        max: maxTotal,
+                        title: { display: true, text: "Surface (km²)" }
+                    },
+                    y: { stacked: true }
+                }
+            }
+        });
+    });
+
+});
+</script>
+</body>
+</html>
